@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="error-page section-dark">
+  <div class="deco-ring deco-ring--page" aria-hidden="true"></div>
+  <div class="container container--text error-inner">
+    <p class="error-code" aria-hidden="true">500</p>
+    <h1 class="page-title">Algo não saiu como esperado.</h1>
+    <p class="page-lead">Tivemos um problema temporário. Tente novamente em instantes ou fale diretamente comigo.</p>
+    <div class="btn-row btn-row--center">
+      <a class="btn btn-gold btn-lg" href="{{ url_for('main.index') }}">Voltar ao início</a>
+      <a class="btn btn-ghost-light btn-lg" href="{{ wa_link() or url_for('main.contato') }}" {% if wa_link() %}target="_blank" rel="noopener"{% endif %}>Falar com a Jaqueline</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

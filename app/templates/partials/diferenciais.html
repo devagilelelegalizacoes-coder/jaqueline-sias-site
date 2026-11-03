@@ -1,0 +1,28 @@
+<section id="diferenciais" class="section section-light" aria-labelledby="diferenciais-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow eyebrow--dark">Diferenciais</p>
+      <h2 id="diferenciais-title" class="section-title">Por que escolher a Jaqueline?</h2>
+    </div>
+    <div class="bento">
+      {% for d in content.DIFFERENTIALS %}
+      <article class="bento-card bento-card--{{ d.variant }} reveal">
+        {% if d.variant == 'feature' %}<span class="deco-mono deco-mono--card" aria-hidden="true"></span>{% endif %}
+        {% if d.variant == 'wide' %}
+          <span class="icon-tile">{{ icon(d.icon) }}</span>
+          <div>
+            <h3>{{ d.title }}</h3>
+            <p>{{ d.desc }}</p>
+          </div>
+        {% else %}
+          {{ icon(d.icon, 'bento-icon') }}
+          <div class="bento-text">
+            <h3>{{ d.title }}</h3>
+            <p>{{ d.desc }}</p>
+          </div>
+        {% endif %}
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>

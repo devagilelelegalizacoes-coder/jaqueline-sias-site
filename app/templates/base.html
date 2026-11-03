@@ -1,0 +1,134 @@
+{% set is_home = request.endpoint == 'main.index' %}
+{% set nav = [
+  ('Sobre', 'main.sobre', 'sobre'),
+  ('Serviços', 'main.servicos', 'servicos'),
+  ('Avaliações', None, 'avaliacoes'),
+  ('Como funciona', None, 'como-funciona'),
+  ('Dúvidas', None, 'duvidas'),
+  ('Contato', 'main.contato', 'contato'),
+] %}
+{% macro nav_href(endpoint, anchor) -%}
+  {%- if is_home -%}#{{ anchor }}{%- elif endpoint -%}{{ url_for(endpoint) }}{%- else -%}{{ url_for('main.index') }}#{{ anchor }}{%- endif -%}
+{%- endmacro %}
+{% set wa_general = wa_link() %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{{ page_title }}</title>
+  <meta name="description" content="{{ meta_description }}">
+  {% if noindex %}<meta name="robots" content="noindex, follow">{% else %}<meta name="robots" content="index, follow, max-image-preview:large">{% endif %}
+  {% if canonical %}<link rel="canonical" href="{{ canonical }}">{% endif %}
+  {% if cfg.GOOGLE_SITE_VERIFICATION %}<meta name="google-site-verification" content="{{ cfg.GOOGLE_SITE_VERIFICATION }}">{% endif %}
+  <meta name="theme-color" content="#3E0A4F">
+  <meta name="format-detection" content="telephone=no">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="{{ cfg.SITE_NAME }}">
+  <meta property="og:title" content="{{ page_title }}">
+  <meta property="og:description" content="{{ meta_description }}">
+  {% if canonical %}<meta property="og:url" content="{{ canonical }}">{% endif %}
+  <meta property="og:image" content="{{ cfg.SITE_URL }}{{ url_for('static', filename='images/branding/og-image.jpg') }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Jaqueline Sias Despachante">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="{{ url_for('main.favicon') }}" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon/favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ asset('images/favicon/apple-touch-icon.png') }}">
+  <link rel="manifest" href="{{ url_for('main.manifest') }}">
+
+  {# mesma URL usada no @font-face (sem ?v=) para o preload ser aproveitado #}
+  <link rel="preload" href="{{ url_for('static', filename='fonts/montserrat-latin.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ url_for('static', filename='fonts/poppins-300-latin.woff2') }}" as="font" type="font/woff2" crossorigin>
+  {% block preload %}{% endblock %}
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/components.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
+  {% if json_ld %}<script type="application/ld+json">{{ json_ld }}</script>{% endif %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  <a class="skip-link" href="#conteudo-principal">Pular para o conteúdo</a>
+
+  <header class="site-header" data-header>
+    <div class="container header-bar">
+      <a class="brand" href="{{ url_for('main.index') }}" aria-label="Jaqueline Sias Despachante, página inicial">
+        <img src="{{ asset('images/branding/logo-horizontal.webp') }}" alt="Jaqueline Sias Despachante" width="148" height="44">
+      </a>
+      <nav class="nav-desktop" aria-label="Principal">
+        {% for label, endpoint, anchor in nav %}
+          <a href="{{ nav_href(endpoint, anchor) }}" {% if request.endpoint == endpoint %}aria-current="page"{% endif %}>{{ label }}</a>
+        {% endfor %}
+        <a class="btn btn-outline-gold btn-sm" href="{{ wa_general or url_for('main.contato') }}" {% if wa_general %}target="_blank" rel="noopener"{% endif %}>Fale comigo</a>
+      </nav>
+      <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-mobile" data-menu-toggle>
+        <span class="menu-icon-open">{{ icon('menu') }}</span>
+        <span class="menu-icon-close">{{ icon('x') }}</span>
+      </button>
+    </div>
+    <nav class="nav-mobile" id="menu-mobile" aria-label="Menu mobile" hidden data-menu>
+      <div class="container">
+        {% for label, endpoint, anchor in nav %}
+          <a href="{{ nav_href(endpoint, anchor) }}">{{ label }}</a>
+        {% endfor %}
+        <a class="btn btn-gold btn-block" href="{{ wa_general or url_for('main.contato') }}" {% if wa_general %}target="_blank" rel="noopener"{% endif %}>Fale comigo pelo WhatsApp</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="conteudo-principal" tabindex="-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <img class="footer-logo" src="{{ asset('images/branding/logo-horizontal.webp') }}" alt="Jaqueline Sias Despachante" width="161" height="48" loading="lazy">
+          <p>Assessoria em serviços e documentação veicular{% if location_label() %} em {{ location_label() }}{% endif %}.</p>
+        </div>
+        <div class="footer-col">
+          <h2 class="footer-title">Navegação</h2>
+          <a href="{{ url_for('main.sobre') }}">Sobre</a>
+          <a href="{{ url_for('main.servicos') }}">Serviços</a>
+          <a href="{{ url_for('main.index') }}#como-funciona">Como funciona</a>
+          <a href="{{ url_for('main.index') }}#duvidas">Dúvidas frequentes</a>
+          <a href="{{ url_for('main.conteudo') }}">Conteúdo</a>
+          <a href="{{ url_for('main.contato') }}">Contato</a>
+        </div>
+        <div class="footer-col">
+          <h2 class="footer-title">Contato</h2>
+          {% if wa_general and phone_display() %}<a href="{{ wa_general }}" target="_blank" rel="noopener">{{ phone_display() }}</a>{% endif %}
+          {% if cfg.CONTACT_EMAIL %}<a href="mailto:{{ cfg.CONTACT_EMAIL }}">{{ cfg.CONTACT_EMAIL }}</a>{% endif %}
+          {% if cfg.INSTAGRAM_URL %}<a href="{{ cfg.INSTAGRAM_URL }}" target="_blank" rel="noopener">{{ cfg.INSTAGRAM_HANDLE }}</a>{% endif %}
+          {% if cfg.BUSINESS_HOURS %}<span>{{ cfg.BUSINESS_HOURS }}</span>{% endif %}
+        </div>
+        <div class="footer-col">
+          <h2 class="footer-title">Privacidade</h2>
+          <p class="footer-small">Os dados do formulário são usados apenas para responder ao seu contato. Este site não utiliza rastreadores de terceiros.</p>
+          <a href="{{ url_for('main.privacidade') }}">Política de Privacidade</a>
+        </div>
+      </div>
+      <div class="gold-rule" aria-hidden="true"></div>
+      <p class="footer-copy">© {{ current_year }} Jaqueline Sias Despachante. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  {% if wa_general %}
+  <div class="wa-float" data-wa-float>
+    <span class="wa-tooltip" role="tooltip" id="wa-tooltip">Fale diretamente comigo</span>
+    <a class="wa-button" href="{{ wa_general }}" target="_blank" rel="noopener" aria-label="Fale diretamente comigo pelo WhatsApp" aria-describedby="wa-tooltip">
+      <span class="wa-pulse" aria-hidden="true"></span>
+      {{ icon('whatsapp') }}
+    </a>
+  </div>
+  {% endif %}
+
+  <script src="{{ asset('js/main.js') }}" defer></script>
+  <script src="{{ asset('js/animations.js') }}" defer></script>
+  <script src="{{ asset('js/whatsapp.js') }}" defer></script>
+</body>
+</html>

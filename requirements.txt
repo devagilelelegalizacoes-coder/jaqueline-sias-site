@@ -1,0 +1,25 @@
+# Dependências diretas
+Flask==3.1.2
+Flask-WTF==1.2.2
+WTForms==3.2.1
+Flask-Limiter==3.12
+python-dotenv==1.1.1
+gunicorn==23.0.0
+
+# Dependências transitivas (fixadas para builds reproduzíveis)
+blinker==1.9.0
+click==8.5.0
+Deprecated==3.0.1
+itsdangerous==2.2.0
+Jinja2==3.1.6
+limits==5.8.0
+markdown-it-py==4.2.0
+MarkupSafe==3.0.4
+mdurl==0.1.2
+ordered-set==4.1.0
+packaging==26.3
+Pygments==2.21.0
+rich==13.9.4
+typing_extensions==4.16.0
+Werkzeug==3.1.9
+wrapt==2.5.2

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+  {% with crumb='Contato', heading='Fale com a Jaqueline',
+          lead='Envie sua dúvida ou solicitação. O WhatsApp é o caminho mais rápido.' %}
+    {% include "partials/page_hero.html" %}
+  {% endwith %}
+  {% include "partials/contato.html" %}
+  {% include "partials/como_funciona.html" %}
+{% endblock %}

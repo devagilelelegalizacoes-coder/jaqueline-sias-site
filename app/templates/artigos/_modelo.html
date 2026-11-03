@@ -1,0 +1,20 @@
+{#
+  MODELO DE ARTIGO — copie este arquivo para artigos/<slug>.html
+  e registre o artigo em app/content.py (lista ARTICLES).
+#}
+{% extends "base.html" %}
+{% block content %}
+  {% with crumb='Conteúdo', heading=article.title, lead=article.description %}
+    {% include "partials/page_hero.html" %}
+  {% endwith %}
+  <article class="section section-light">
+    <div class="container container--text prose">
+      <p class="muted">{{ article.topic }}{% if article.date %} · {{ article.date }}{% endif %}</p>
+
+      <h2>Subtítulo</h2>
+      <p>Texto do artigo.</p>
+
+      <p><a class="inline-link" href="{{ url_for('main.conteudo') }}">← Voltar para Conteúdo</a></p>
+    </div>
+  </article>
+{% endblock %}

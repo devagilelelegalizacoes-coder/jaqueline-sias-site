@@ -1,0 +1,32 @@
+services:
+  web:
+    build: .
+    image: jaqueline-sias-site:latest
+    container_name: jaqueline-sias-site
+    env_file:
+      - .env
+    environment:
+      APP_ENV: ${APP_ENV:-production}
+      PORT: 8000
+      CONTACT_STORAGE_PATH: /app/instance/contatos.jsonl
+    ports:
+      - "${HOST_PORT:-8000}:8000"
+    volumes:
+      - contatos:/app/instance
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=4).status == 200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+
+volumes:
+  contatos:

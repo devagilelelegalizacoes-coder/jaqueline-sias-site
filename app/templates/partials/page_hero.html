@@ -1,0 +1,15 @@
+<section class="page-hero section-dark" aria-labelledby="page-title">
+  <div class="deco-ring deco-ring--page" aria-hidden="true"></div>
+  <div class="deco-mono deco-mono--page" aria-hidden="true"></div>
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Você está em">
+      <ol>
+        <li><a href="{{ url_for('main.index') }}">Início</a></li>
+        <li aria-current="page">{{ crumb }}</li>
+      </ol>
+    </nav>
+    <h1 id="page-title" class="page-title">{{ heading }}</h1>
+    {% if lead %}<p class="page-lead">{{ lead }}</p>{% endif %}
+  </div>
+  <div class="gold-rule" aria-hidden="true"></div>
+</section>

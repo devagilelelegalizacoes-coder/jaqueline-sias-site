@@ -1,0 +1,34 @@
+{% set initial_reviews = 6 %}
+<section id="avaliacoes" class="section section-blush" aria-labelledby="avaliacoes-title">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <p class="eyebrow eyebrow--dark">Avaliações no Google</p>
+        <h2 id="avaliacoes-title" class="section-title">O que dizem os clientes.</h2>
+      </div>
+      <p class="section-intro section-intro--dark">Relatos publicados por clientes no perfil da Jaqueline Sias Despachante no Google.</p>
+    </div>
+    <div class="reviews" id="lista-avaliacoes" data-reviews>
+      {% for r in content.REVIEWS %}
+      <figure class="review-card{% if loop.index > initial_reviews %} review-card--extra{% endif %}">
+        <span class="quote-mark" aria-hidden="true">“</span>
+        <blockquote>{{ r.text }}</blockquote>
+        <figcaption>
+          <span class="avatar" aria-hidden="true">{{ r.initial }}</span>
+          <span class="review-meta">
+            <span class="review-name">{{ r.name }}</span>
+            <span class="review-source">Avaliação no Google</span>
+          </span>
+        </figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+    <div class="center-row">
+      <button class="btn btn-outline-purple" type="button" hidden data-reviews-toggle aria-controls="lista-avaliacoes" aria-expanded="false"
+              data-label-more="Ver todas as {{ content.REVIEWS|length }} avaliações" data-label-less="Mostrar menos">Ver todas as {{ content.REVIEWS|length }} avaliações</button>
+      {% if cfg.GOOGLE_REVIEWS_URL %}
+      <a class="btn btn-text" href="{{ cfg.GOOGLE_REVIEWS_URL }}" target="_blank" rel="noopener">Ver no Google {{ icon('arrow-right') }}</a>
+      {% endif %}
+    </div>
+  </div>
+</section>

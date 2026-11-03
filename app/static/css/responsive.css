@@ -1,0 +1,84 @@
+/* ==========================================================================
+   Breakpoints (mobile-first)
+   360–430px: smartphones · 640px: phablets · 900px: tablets/landscape
+   1080px: notebooks · 1600px: Full HD
+   ========================================================================== */
+
+/* Smartphones pequenos (≤ 380px) */
+@media (max-width: 380px) {
+  :root { --gutter: 16px; }
+  .brand img { height: 34px; }
+  .btn-lg { padding: 0 22px; font-size: 14px; }
+  .hero-copy .btn-row .btn { width: 100%; }
+  .service-card, .bento-card, .review-card, .topic-card { padding: 24px; }
+  .faq-answer p { padding-right: 0; }
+}
+
+@media (max-width: 639px) {
+  .hero-copy .btn-row .btn { flex: 1 1 100%; }
+  .wa-button { width: 56px; height: 56px; }
+  .wa-button .icon { width: 28px; height: 28px; }
+  /* Evita que o botão flutuante cubra o fim do rodapé */
+  .footer-copy { padding-bottom: 64px; }
+}
+
+/* Phablets e tablets em retrato */
+@media (min-width: 640px) {
+  :root { --gutter: 24px; }
+  .bento { grid-template-columns: repeat(2, 1fr); }
+  .bento-card--feature { grid-column: span 2; }
+  .insta-grid { gap: 16px; }
+  .footer-grid { grid-template-columns: repeat(2, 1fr); }
+  .section-head--split { flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; }
+}
+
+/* Tablets em paisagem */
+@media (min-width: 900px) {
+  .hero-grid { grid-template-columns: 1.1fr .9fr; }
+  .about-grid { grid-template-columns: .9fr 1.1fr; }
+  .faq-grid { grid-template-columns: .8fr 1.2fr; }
+  .faq-intro { position: sticky; top: calc(var(--header-h) + 32px); }
+  .contact-grid { grid-template-columns: 1fr 1fr; }
+  .insta-grid { grid-template-columns: repeat(4, 1fr); }
+
+  .steps { grid-template-columns: repeat(3, 1fr); }
+  .steps::before {
+    left: 16%; right: 16%; top: 36px; bottom: auto; width: auto; height: 1px; transform: none;
+    background: linear-gradient(90deg, rgba(212, 175, 106, .2), var(--gold), rgba(212, 175, 106, .2));
+  }
+
+  /* Tooltip do WhatsApp apenas onde há ponteiro (hover) */
+  .wa-float:hover .wa-tooltip, .wa-float:focus-within .wa-tooltip { opacity: 1; transform: none; }
+}
+
+/* Notebooks */
+@media (min-width: 1080px) {
+  :root { --header-h: 76px; }
+  .brand img { height: 44px; }
+  .nav-desktop { display: flex; }
+  .menu-toggle, .nav-mobile { display: none !important; }
+
+  .bento { grid-template-columns: repeat(4, 1fr); grid-auto-rows: minmax(210px, auto); }
+  .bento-card--feature { grid-column: span 2; }
+  .bento-card--wide { grid-column: span 3; padding: 30px 36px; }
+  .footer-grid { grid-template-columns: 1.3fr 1fr 1.2fr 1.3fr; }
+}
+
+/* Full HD */
+@media (min-width: 1600px) {
+  :root { --container: 1280px; }
+  .hero-title { font-size: 72px; }
+  .arch-frame { width: min(100%, 500px); }
+}
+
+/* Telas baixas em paisagem (celular deitado) */
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero-grid { padding-top: 32px; }
+  .arch-frame { width: min(100%, 300px); }
+}
+
+/* Impressão */
+@media print {
+  .site-header, .wa-float, .nav-mobile, .deco-ring, .deco-mono, form { display: none !important; }
+  .section-dark { background: none; color: #000; }
+}

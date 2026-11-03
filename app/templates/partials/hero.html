@@ -1,0 +1,32 @@
+{% set wa_general = wa_link() %}
+<section id="inicio" class="hero section-dark" aria-labelledby="hero-title">
+  <div class="deco-ring deco-ring--hero-a" aria-hidden="true"></div>
+  <div class="deco-ring deco-ring--hero-b" aria-hidden="true"></div>
+  <div class="deco-mono deco-mono--hero" aria-hidden="true"></div>
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow eyebrow--line">Despachante{% if location_label() %} · {{ location_label() }}{% endif %}</p>
+      <h1 id="hero-title" class="hero-title">Seu veículo em dia, sem complicação.</h1>
+      <p class="hero-lead">Assessoria em serviços e documentação veicular com atendimento personalizado, praticidade e confiança.</p>
+      <div class="btn-row">
+        {% if wa_general %}
+        <a class="btn btn-gold btn-lg" href="{{ wa_general }}" target="_blank" rel="noopener">{{ icon('whatsapp') }} Fale comigo pelo WhatsApp</a>
+        {% else %}
+        <a class="btn btn-gold btn-lg" href="{{ url_for('main.contato') }}">Fale comigo</a>
+        {% endif %}
+        <a class="btn btn-ghost-light btn-lg" href="{{ '#servicos' if request.endpoint == 'main.index' else url_for('main.servicos') }}">Conheça nossos serviços</a>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <div class="arch-frame">
+        <span class="arch-line" aria-hidden="true"></span>
+        <img src="{{ asset('images/team/jaqueline-hero.webp') }}"
+             srcset="{{ asset('images/team/jaqueline-hero-480.webp') }} 480w, {{ asset('images/team/jaqueline-hero.webp') }} 700w"
+             sizes="(min-width: 900px) 460px, 90vw"
+             alt="Jaqueline Sias, despachante, sorrindo e segurando um celular"
+             width="700" height="840" fetchpriority="high">
+      </div>
+    </div>
+  </div>
+  <div class="gold-rule" aria-hidden="true"></div>
+</section>

@@ -1,0 +1,17 @@
+<section id="como-funciona" class="section section-dark" aria-labelledby="como-funciona-title">
+  <div class="container container--narrow">
+    <div class="section-head section-head--center">
+      <p class="eyebrow">Como funciona</p>
+      <h2 id="como-funciona-title" class="section-title">Três passos para começar.</h2>
+    </div>
+    <ol class="steps">
+      {% for st in content.STEPS %}
+      <li class="step reveal">
+        <span class="step-number" aria-hidden="true">{{ loop.index }}</span>
+        <h3><span class="visually-hidden">Passo {{ loop.index }}: </span>{{ st.title }}</h3>
+        <p>{{ st.desc }}</p>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block preload %}
+  <link rel="preload" as="image" href="{{ asset('images/team/jaqueline-hero.webp') }}"
+        imagesrcset="{{ asset('images/team/jaqueline-hero-480.webp') }} 480w, {{ asset('images/team/jaqueline-hero.webp') }} 700w"
+        imagesizes="(min-width: 900px) 460px, 90vw" fetchpriority="high">
+{% endblock %}
+{% block body_class %}page-home{% endblock %}
+{% block content %}
+  {% include "partials/hero.html" %}
+  {% include "partials/sobre.html" %}
+  {% include "partials/servicos.html" %}
+  {% include "partials/diferenciais.html" %}
+  {% include "partials/avaliacoes.html" %}
+  {% include "partials/como_funciona.html" %}
+  {% include "partials/faq.html" %}
+  {% include "partials/conteudo.html" %}
+  {% include "partials/instagram.html" %}
+  {% include "partials/contato.html" %}
+{% endblock %}

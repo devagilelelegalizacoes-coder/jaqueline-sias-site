@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+  {% with crumb='Política de Privacidade', heading='Política de Privacidade',
+          lead='Como os dados enviados por este site são coletados, usados e protegidos.' %}
+    {% include "partials/page_hero.html" %}
+  {% endwith %}
+  <section class="section section-light">
+    <div class="container container--text prose">
+      <p class="muted">Última atualização: {{ updated.strftime('%d/%m/%Y') }}</p>
+
+      <h2>1. Quem é responsável pelos dados</h2>
+      <p>Este site pertence a <strong>Jaqueline Sias Despachante</strong>, responsável pelo tratamento dos dados pessoais enviados por meio dele, nos termos da Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018 — LGPD).{% if cfg.CONTACT_EMAIL %} Para qualquer assunto relacionado a esta política, escreva para <a href="mailto:{{ cfg.CONTACT_EMAIL }}">{{ cfg.CONTACT_EMAIL }}</a>.{% endif %}</p>
+
+      <h2>2. Quais dados são coletados</h2>
+      <p>Coletamos somente o necessário para responder ao seu contato. No formulário do site:</p>
+      <ul>
+        <li>nome;</li>
+        <li>telefone ou WhatsApp;</li>
+        <li>serviço de interesse (opcional);</li>
+        <li>o texto da mensagem que você escrever.</li>
+      </ul>
+      <p>Pedimos que você não envie pelo formulário documentos, números de CPF, RENAVAM ou outros dados que não sejam necessários para o primeiro contato. Essas informações serão solicitadas, se necessárias, durante o atendimento.</p>
+
+      <h2>3. Para que os dados são usados</h2>
+      <p>Os dados são usados exclusivamente para retornar o seu contato e prestar orientação sobre o serviço solicitado. Eles não são vendidos, alugados nem usados para envio de publicidade sem a sua autorização.</p>
+
+      <h2>4. Base legal</h2>
+      <p>O tratamento se baseia no seu consentimento, manifestado ao marcar a caixa de concordância do formulário (art. 7º, I, da LGPD), e na execução de procedimentos preliminares relacionados a um serviço solicitado por você (art. 7º, V).</p>
+
+      <h2>5. Por quanto tempo os dados são guardados</h2>
+      <p>As mensagens são mantidas pelo tempo necessário para o atendimento e, depois, excluídas, exceto quando a guarda for exigida por obrigação legal ou regulatória.</p>
+
+      <h2>6. Compartilhamento</h2>
+      <p>Os dados não são compartilhados com terceiros, exceto com prestadores de infraestrutura necessários ao funcionamento do site (hospedagem e e-mail), que atuam apenas para essa finalidade, ou quando exigido por lei ou autoridade competente.</p>
+      <p>Ao clicar em botões de WhatsApp ou Instagram, você é direcionado a serviços da Meta Platforms, que têm políticas de privacidade próprias.</p>
+
+      <h2>7. Cookies e rastreadores</h2>
+      <p>Este site não utiliza cookies de publicidade, ferramentas de análise ou rastreadores de terceiros. É utilizado apenas um cookie de sessão estritamente necessário, que protege o formulário contra envios fraudulentos e é apagado ao fechar o navegador.</p>
+      <p>Como em qualquer site, o servidor registra informações técnicas de acesso (como endereço IP, data e hora) para fins de segurança e cumprimento do Marco Civil da Internet (Lei nº 12.965/2014).</p>
+
+      <h2>8. Segurança</h2>
+      <p>O site utiliza conexão criptografada (HTTPS), proteção contra envios automatizados e controles de acesso aos dados recebidos.</p>
+
+      <h2>9. Seus direitos</h2>
+      <p>Você pode, a qualquer momento, solicitar a confirmação da existência de tratamento, o acesso, a correção, a anonimização ou a eliminação dos seus dados, além de revogar o consentimento, conforme o art. 18 da LGPD.{% if cfg.CONTACT_EMAIL %} Basta enviar o pedido para <a href="mailto:{{ cfg.CONTACT_EMAIL }}">{{ cfg.CONTACT_EMAIL }}</a>.{% endif %} Você também pode apresentar reclamação à Autoridade Nacional de Proteção de Dados (ANPD).</p>
+
+      <h2>10. Alterações</h2>
+      <p>Esta política pode ser atualizada. A data da última revisão aparece no início desta página.</p>
+    </div>
+  </section>
+{% endblock %}

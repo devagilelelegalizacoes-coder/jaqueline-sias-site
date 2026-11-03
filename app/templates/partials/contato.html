@@ -1,0 +1,95 @@
+{% set wa_general = wa_link() %}
+{% set h = heading_tag | default('h2') %}
+{% macro field_error(field) -%}
+  <span class="field-error" id="erro-{{ field.name }}" data-error-for="{{ field.name }}" {% if not field.errors %}hidden{% endif %}>{{ field.errors[0] if field.errors }}</span>
+{%- endmacro %}
+<section id="contato" class="section section-light" aria-labelledby="contato-title">
+  <div class="container contact-grid">
+    <div class="contact-card">
+      <div class="deco-ring deco-ring--contact" aria-hidden="true"></div>
+      <p class="eyebrow">Contato</p>
+      <{{ h }} id="contato-title" class="section-title section-title--sm">Vamos resolver a documentação do seu veículo?</{{ h }}>
+      {% if wa_general %}
+      <a class="btn btn-gold btn-lg btn-self-start" href="{{ wa_general }}" target="_blank" rel="noopener">{{ icon('whatsapp') }} Fale comigo pelo WhatsApp</a>
+      {% endif %}
+      <ul class="contact-list">
+        {% if wa_general and phone_display() %}
+        <li>{{ icon('phone') }}<a href="{{ wa_general }}" target="_blank" rel="noopener">{{ phone_display() }}</a></li>
+        {% endif %}
+        {% if cfg.CONTACT_EMAIL %}
+        <li>{{ icon('mail') }}<a href="mailto:{{ cfg.CONTACT_EMAIL }}">{{ cfg.CONTACT_EMAIL }}</a></li>
+        {% endif %}
+        {% if cfg.INSTAGRAM_URL %}
+        <li>{{ icon('instagram') }}<a href="{{ cfg.INSTAGRAM_URL }}" target="_blank" rel="noopener">{{ cfg.INSTAGRAM_HANDLE }}</a></li>
+        {% endif %}
+        {% if cfg.BUSINESS_ADDRESS or location_label() %}
+        <li>{{ icon('map-pin') }}<span>{% if cfg.BUSINESS_ADDRESS %}{{ cfg.BUSINESS_ADDRESS }}, {% endif %}{{ cfg.BUSINESS_CITY }}{% if cfg.BUSINESS_STATE %}, {{ 'Rio de Janeiro' if cfg.BUSINESS_STATE == 'RJ' else cfg.BUSINESS_STATE }}{% endif %}</span></li>
+        {% endif %}
+      </ul>
+    </div>
+
+    <div class="form-card" id="formulario">
+      <div class="form-success" role="status" data-form-success {% if not contact_ok %}hidden{% endif %} tabindex="-1">
+        <span class="success-icon">{{ icon('check') }}</span>
+        <h3>Mensagem recebida<span data-success-name>{% if contact_ok %}, {{ contact_ok.first_name }}{% endif %}</span>.</h3>
+        <p>Obrigada pelo contato. Retorno pelo telefone informado assim que possível.</p>
+        <div class="btn-row">
+          <a class="btn btn-whatsapp" data-success-wa href="{{ (contact_ok.wa if contact_ok else wa_general) or '#' }}" target="_blank" rel="noopener" {% if not wa_general %}hidden{% endif %}>{{ icon('whatsapp') }} Agilizar pelo WhatsApp</a>
+          <a class="btn btn-outline-purple" href="{{ url_for('main.contato') }}#formulario" data-form-reset>Enviar outra mensagem</a>
+        </div>
+      </div>
+
+      <form method="post" action="{{ url_for('main.contato') }}" novalidate data-contact-form {% if contact_ok %}hidden{% endif %}>
+        {{ form.csrf_token }}
+        <div class="form-head">
+          <h3>Envie uma mensagem</h3>
+          <p>Campos com * são obrigatórios.</p>
+        </div>
+        {% with messages = get_flashed_messages(category_filter=['error']) %}
+        <div class="form-alert" role="alert" data-form-alert {% if not messages %}hidden{% endif %}>{{ messages[0] if messages }}</div>
+        {% endwith %}
+
+        <div class="field">
+          <label for="nome">Nome *</label>
+          {{ form.nome(id='nome', autocomplete='name', required=True, maxlength=80,
+                       **({'aria-invalid': 'true', 'aria-describedby': 'erro-nome'} if form.nome.errors else {'aria-describedby': 'erro-nome'})) }}
+          {{ field_error(form.nome) }}
+        </div>
+        <div class="field">
+          <label for="telefone">Telefone / WhatsApp *</label>
+          {{ form.telefone(id='telefone', type='tel', inputmode='tel', autocomplete='tel', placeholder='(21) 90000-0000', required=True, maxlength=20,
+                           **({'aria-invalid': 'true', 'aria-describedby': 'erro-telefone'} if form.telefone.errors else {'aria-describedby': 'erro-telefone'})) }}
+          {{ field_error(form.telefone) }}
+        </div>
+        <div class="field">
+          <label for="servico">Serviço de interesse</label>
+          {{ form.servico(id='servico') }}
+          {{ field_error(form.servico) }}
+        </div>
+        <div class="field">
+          <label for="mensagem">Mensagem *</label>
+          {{ form.mensagem(id='mensagem', rows=4, required=True, maxlength=1500,
+                           **({'aria-invalid': 'true', 'aria-describedby': 'erro-mensagem'} if form.mensagem.errors else {'aria-describedby': 'erro-mensagem'})) }}
+          {{ field_error(form.mensagem) }}
+        </div>
+        <div class="hp-field" aria-hidden="true">
+          <label for="website">Não preencha este campo</label>
+          {{ form.website(id='website', tabindex='-1', autocomplete='off') }}
+        </div>
+        <div class="field field-check">
+          {{ form.consent(id='consent', required=True, **({'aria-invalid': 'true', 'aria-describedby': 'erro-consent'} if form.consent.errors else {'aria-describedby': 'erro-consent'})) }}
+          <label for="consent">Concordo com o uso dos meus dados apenas para retorno deste contato, conforme a <a href="{{ url_for('main.privacidade') }}">Política de Privacidade</a>. *</label>
+        </div>
+        {{ field_error(form.consent) }}
+        <button class="btn btn-purple btn-lg btn-block" type="submit" data-submit>
+          <span data-submit-label>Enviar mensagem</span>
+        </button>
+      </form>
+    </div>
+  </div>
+  {% if cfg.MAPS_EMBED_URL %}
+  <div class="container map-wrap">
+    <iframe src="{{ cfg.MAPS_EMBED_URL }}" title="Localização da Jaqueline Sias Despachante no mapa" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+  {% endif %}
+</section>

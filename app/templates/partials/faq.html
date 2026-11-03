@@ -1,0 +1,21 @@
+{% set wa_general = wa_link() %}
+<section id="duvidas" class="section section-light" aria-labelledby="duvidas-title">
+  <div class="container container--narrow faq-grid">
+    <div class="faq-intro">
+      <p class="eyebrow eyebrow--dark">Dúvidas frequentes</p>
+      <h2 id="duvidas-title" class="section-title section-title--sm">Perguntas que recebo com frequência.</h2>
+      <p>Não encontrou a sua? {% if wa_general %}<a class="inline-link" href="{{ wa_general }}" target="_blank" rel="noopener">Mande sua pergunta pelo WhatsApp</a>{% else %}<a class="inline-link" href="{{ url_for('main.contato') }}">Mande sua pergunta</a>{% endif %}.</p>
+    </div>
+    <div class="faq-list" data-accordion>
+      {% for f in content.FAQS %}
+      <details class="faq-item" {% if loop.first %}open{% endif %}>
+        <summary>
+          <span>{{ f.q }}</span>
+          <span class="faq-toggle" aria-hidden="true">{{ icon('plus') }}</span>
+        </summary>
+        <div class="faq-answer"><p>{{ f.a }}</p></div>
+      </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,37 @@
+{% set h = heading_tag | default('h2') %}
+<section id="conteudo" class="section section-blush" aria-labelledby="conteudo-title">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <p class="eyebrow eyebrow--dark">Conteúdo</p>
+        <{{ h }} id="conteudo-title" class="section-title">Informação que facilita sua vida.</{{ h }}>
+      </div>
+      <p class="section-intro section-intro--dark">{% if content.ARTICLES %}Orientações sobre documentação veicular, legislação e processos.{% else %}Artigos e orientações sobre documentação veicular em preparação.{% endif %}</p>
+    </div>
+
+    {% if content.ARTICLES %}
+    <div class="topics-grid">
+      {% for a in content.ARTICLES %}
+      <article class="topic-card reveal">
+        <span class="badge">{{ a.topic }}</span>
+        <h3><a class="stretched-link" href="{{ url_for('main.artigo', slug=a.slug) }}">{{ a.title }}</a></h3>
+        <p>{{ a.description }}</p>
+      </article>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="topics-grid{% if content.ARTICLES %} topics-grid--spaced{% endif %}">
+      {% for t in content.TOPICS %}
+      <article class="topic-card reveal">
+        <div class="topic-top">
+          {{ icon(t.icon, 'topic-icon') }}
+          {% if not content.ARTICLES %}<span class="badge">Em breve</span>{% endif %}
+        </div>
+        <h3>{{ t.title }}</h3>
+        <p>{{ t.desc }}</p>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>

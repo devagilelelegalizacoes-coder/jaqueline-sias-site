@@ -1,0 +1,12 @@
+Copyright (c) 2026 Jaqueline Sias Despachante. Todos os direitos reservados.
+
+Este software, seu código-fonte, textos, fotografias, logotipos e demais
+elementos de identidade visual são de uso exclusivo de Jaqueline Sias
+Despachante. É proibida a cópia, modificação, distribuição ou uso, total ou
+parcial, sem autorização prévia e por escrito da titular.
+
+Componentes de terceiros incluídos, sob suas próprias licenças:
+- Ícones Lucide (https://lucide.dev) — licença ISC.
+- Fontes Montserrat e Poppins (Google Fonts) — SIL Open Font License 1.1.
+- Flask, Flask-WTF, WTForms, Flask-Limiter, Gunicorn e demais dependências
+  Python listadas em requirements.txt — licenças respectivas.

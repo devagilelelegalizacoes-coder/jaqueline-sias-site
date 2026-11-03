@@ -1,0 +1,23 @@
+{% set wa_general = wa_link() %}
+{% set h = heading_tag | default('h2') %}
+<section id="sobre" class="section section-light" aria-labelledby="sobre-title">
+  <div class="container container--narrow about-grid">
+    <div class="about-photo reveal">
+      <span class="offset-frame" aria-hidden="true"></span>
+      <img src="{{ asset('images/team/jaqueline-sobre.webp') }}"
+           srcset="{{ asset('images/team/jaqueline-sobre-540.webp') }} 540w, {{ asset('images/team/jaqueline-sobre.webp') }} 900w"
+           sizes="(min-width: 900px) 440px, 90vw"
+           alt="Retrato de Jaqueline Sias com blusa branca e calça roxa"
+           width="900" height="1050" loading="lazy">
+    </div>
+    <div class="about-copy reveal">
+      <p class="eyebrow eyebrow--dark">Sobre</p>
+      <{{ h }} id="sobre-title" class="section-title">Prazer, sou Jaqueline Sias.</{{ h }}>
+      <span class="gold-bar" aria-hidden="true"></span>
+      <p>Acredito que cuidar da documentação de um veículo vai além de preencher formulários. Cada processo envolve um patrimônio, prazos a cumprir e, muitas vezes, a tranquilidade de uma família ou de um negócio.</p>
+      <p>Por isso, meu atendimento é próximo e individual: escuto a sua necessidade, explico cada etapa com clareza e conduzo a documentação com responsabilidade, do primeiro contato à conclusão do processo.</p>
+      <p>{% if cfg.BUSINESS_CITY %}Atendo em {{ cfg.BUSINESS_CITY }}{% if cfg.BUSINESS_STATE %}, {{ 'no Rio de Janeiro' if cfg.BUSINESS_STATE == 'RJ' else cfg.BUSINESS_STATE }}{% endif %}, e estou{% else %}Estou{% endif %} a uma mensagem de distância pelo WhatsApp.</p>
+      <a class="btn btn-purple" href="{{ wa_general or url_for('main.contato') }}" {% if wa_general %}target="_blank" rel="noopener"{% endif %}>Conversar com a Jaqueline</a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,21 @@
+{% if cfg.INSTAGRAM_URL %}
+<section id="instagram" class="section section-dark section-dark--alt" aria-labelledby="instagram-title">
+  <div class="container">
+    <div class="section-head section-head--split">
+      <div>
+        <a class="eyebrow-link" href="{{ cfg.INSTAGRAM_URL }}" target="_blank" rel="noopener">{{ cfg.INSTAGRAM_HANDLE }}</a>
+        <h2 id="instagram-title" class="section-title">Acompanhe nossas dicas e novidades.</h2>
+      </div>
+      <a class="btn btn-outline-gold" href="{{ cfg.INSTAGRAM_URL }}" target="_blank" rel="noopener">{{ icon('instagram') }} Visitar o Instagram</a>
+    </div>
+    <div class="insta-grid">
+      {% for img in content.INSTAGRAM_GALLERY %}
+      <a class="insta-tile reveal" href="{{ cfg.INSTAGRAM_URL }}" target="_blank" rel="noopener" aria-label="Ver o perfil {{ cfg.INSTAGRAM_HANDLE }} no Instagram">
+        <img src="{{ asset(img.src) }}" alt="{{ img.alt }}" width="{{ img.w }}" height="{{ img.h }}" loading="lazy" decoding="async"{% if img.pos %} class="obj-{{ img.pos }}"{% endif %}>
+      </a>
+      {% endfor %}
+    </div>
+    <p class="note-light">Materiais institucionais da marca. As publicações recentes estão no perfil oficial.</p>
+  </div>
+</section>
+{% endif %}
