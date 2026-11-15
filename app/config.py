@@ -14,13 +14,47 @@ def _bool(name: str, default: bool = False) -> bool:
     return value.strip().lower() in {"1", "true", "yes", "on", "sim"}
 
 
+def _clean_secret(value: str | None) -> str:
+    """Remove espaços e aspas que painéis de hospedagem às vezes incluem no valor."""
+    value = (value or "").strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+        value = value[1:-1]
+    return value
+
+
+def _secret_key() -> str:
+    """SECRET_KEY do ambiente; se faltar, uma chave gerada uma vez e guardada em instance/.
+
+    Uma chave aleatória por processo quebraria o login com vários workers do Gunicorn
+    (cada worker rejeitaria a sessão criada pelo outro)."""
+    env = _clean_secret(os.getenv("SECRET_KEY"))
+    if env:
+        return env
+    path = BASE_DIR / "instance" / "secret_key"
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        except FileExistsError:
+            pass
+        else:
+            with os.fdopen(fd, "w") as fh:
+                fh.write(secrets.token_hex(32))
+        key = path.read_text().strip()
+        if key:
+            return key
+    except OSError:
+        pass
+    return secrets.token_hex(32)
+
+
 def _digits(value: str | None) -> str:
     return re.sub(r"\D", "", value or "")
 
 
 class Config:
     # Segurança
-    SECRET_KEY = os.getenv("SECRET_KEY") or secrets.token_hex(32)
+    SECRET_KEY = _secret_key()
     WTF_CSRF_TIME_LIMIT = 60 * 60 * 2  # 2 horas
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"
@@ -65,8 +99,8 @@ class Config:
     MAIL_RECIPIENT = os.getenv("MAIL_RECIPIENT", "").strip()
 
     # Painel administrativo (/admin) e conteúdo editável
-    ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "")
-    ADMIN_PASSWORD_HASH = os.getenv("ADMIN_PASSWORD_HASH", "").strip()
+    ADMIN_PASSWORD = _clean_secret(os.getenv("ADMIN_PASSWORD"))
+    ADMIN_PASSWORD_HASH = _clean_secret(os.getenv("ADMIN_PASSWORD_HASH"))
     ADMIN_AUTH_PATH = os.getenv("ADMIN_AUTH_PATH", str(BASE_DIR / "instance" / "admin_auth.json"))
     SETTINGS_PATH = os.getenv("SETTINGS_PATH", str(BASE_DIR / "instance" / "site_settings.json"))
     UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", str(BASE_DIR / "instance" / "uploads"))
