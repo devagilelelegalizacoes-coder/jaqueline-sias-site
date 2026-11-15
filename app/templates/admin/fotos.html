@@ -1,0 +1,91 @@
+{% extends "admin/base.html" %}
+{% block title %}Fotos{% endblock %}
+{% block content %}
+<div class="adm-head">
+  <div>
+    <h1>Fotos</h1>
+    <p class="adm-intro">Envie JPG, PNG ou WebP (até 10 MB cada). O site recorta, otimiza e converte as fotos automaticamente para carregar rápido.</p>
+  </div>
+</div>
+
+<form method="post" action="{{ url_for('admin.photos') }}" enctype="multipart/form-data" class="adm-form" data-edit-form>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <div class="adm-photo-grid">
+    {% for slot, (label, hint) in slots.items() %}
+    <section class="adm-card adm-photo">
+      <h2>{{ label }}</h2>
+      <img class="adm-photo-img" src="{{ media(fotos[slot]) }}" alt="" data-photo-preview="foto_{{ slot }}">
+      <div class="af">
+        <label for="foto_{{ slot }}">Nova foto</label>
+        <input type="file" id="foto_{{ slot }}" name="foto_{{ slot }}" accept="image/jpeg,image/png,image/webp" data-photo-input>
+        <small class="af-help">{{ hint }} O rosto deve ficar no terço superior.</small>
+      </div>
+      <div class="af">
+        <label for="alt_{{ slot }}">Descrição da foto (texto alternativo)</label>
+        <input type="text" id="alt_{{ slot }}" name="alt_{{ slot }}" value="{{ fotos[slot ~ '_alt'] }}" maxlength="200" required>
+        <small class="af-help">Descreva o que aparece na foto. Ajuda o Google e pessoas com deficiência visual.</small>
+      </div>
+      <label class="af-check"><input type="checkbox" name="padrao_{{ slot }}" value="1"> <span>Voltar para a foto original</span></label>
+    </section>
+    {% endfor %}
+
+    <section class="adm-card adm-photo">
+      <h2>Logotipo</h2>
+      <div class="adm-logo-bg"><img src="{{ media(fotos.logo) }}" alt="" data-photo-preview="foto_logo"></div>
+      <div class="af">
+        <label for="foto_logo">Novo logotipo</label>
+        <input type="file" id="foto_logo" name="foto_logo" accept="image/png,image/webp" data-photo-input>
+        <small class="af-help">PNG com fundo transparente e cores claras (o cabeçalho é roxo).</small>
+      </div>
+      <label class="af-check"><input type="checkbox" name="padrao_logo" value="1"> <span>Voltar para o logotipo original</span></label>
+    </section>
+
+    <section class="adm-card adm-photo">
+      <h2>Imagem de compartilhamento</h2>
+      <img class="adm-photo-img adm-photo-img--wide" src="{{ media(fotos.og) }}" alt="" data-photo-preview="foto_og">
+      <div class="af">
+        <label for="foto_og">Nova imagem</label>
+        <input type="file" id="foto_og" name="foto_og" accept="image/jpeg,image/png,image/webp" data-photo-input>
+        <small class="af-help">Aparece quando o link do site é enviado no WhatsApp, Facebook etc. Recortada em 1200 × 630 px.</small>
+      </div>
+      <label class="af-check"><input type="checkbox" name="padrao_og" value="1"> <span>Voltar para a imagem original</span></label>
+    </section>
+  </div>
+
+  <section class="adm-card">
+    <h2>Galeria (seção Instagram)</h2>
+    <p class="adm-sub">Até {{ max_gallery }} fotos. Marque "Remover" para tirar uma foto da galeria.</p>
+    <div class="adm-gallery">
+      {% for img in fotos.galeria %}
+      <div class="adm-gallery-item">
+        <img src="{{ media(img.src) }}" alt="">
+        <input type="hidden" name="g:{{ loop.index0 }}:src" value="{{ img.src }}">
+        <div class="af">
+          <label for="g-{{ loop.index0 }}-alt">Descrição</label>
+          <input type="text" id="g-{{ loop.index0 }}-alt" name="g:{{ loop.index0 }}:alt" value="{{ img.alt }}" maxlength="200">
+        </div>
+        <label class="af-check"><input type="checkbox" name="g:{{ loop.index0 }}:remover" value="1"> <span>Remover</span></label>
+      </div>
+      {% else %}
+      <p class="adm-sub">Nenhuma foto na galeria.</p>
+      {% endfor %}
+    </div>
+    <div class="af">
+      <label for="galeria_novas">Adicionar fotos à galeria</label>
+      <input type="file" id="galeria_novas" name="galeria_novas" accept="image/jpeg,image/png,image/webp" multiple>
+    </div>
+  </section>
+
+  <div class="adm-savebar">
+    <span class="adm-dirty" data-dirty-msg hidden>Alterações não salvas</span>
+    <button class="adm-btn adm-btn--primary" type="submit">Salvar fotos</button>
+  </div>
+</form>
+
+<form method="post" action="{{ url_for('admin.reset_photos') }}" class="adm-reset"
+      data-confirm="Voltar todas as fotos para as originais? Um backup será salvo.">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <button type="submit" class="adm-btn adm-btn--danger-ghost">↺ Restaurar todas as fotos originais</button>
+</form>
+{% endblock %}

@@ -1,12 +1,13 @@
 {% set h = heading_tag | default('h2') %}
+{% set t = txt.conteudo %}
 <section id="conteudo" class="section section-blush" aria-labelledby="conteudo-title">
   <div class="container">
     <div class="section-head section-head--split">
       <div>
-        <p class="eyebrow eyebrow--dark">Conteúdo</p>
-        <{{ h }} id="conteudo-title" class="section-title">Informação que facilita sua vida.</{{ h }}>
+        {% if t.chamada %}<p class="eyebrow eyebrow--dark">{{ t.chamada }}</p>{% endif %}
+        <{{ h }} id="conteudo-title" class="section-title">{{ t.titulo }}</{{ h }}>
       </div>
-      <p class="section-intro section-intro--dark">{% if content.ARTICLES %}Orientações sobre documentação veicular, legislação e processos.{% else %}Artigos e orientações sobre documentação veicular em preparação.{% endif %}</p>
+      <p class="section-intro section-intro--dark">{{ t.intro_com_artigos if content.ARTICLES else t.intro }}</p>
     </div>
 
     {% if content.ARTICLES %}
@@ -21,17 +22,19 @@
     </div>
     {% endif %}
 
+    {% if site.temas %}
     <div class="topics-grid{% if content.ARTICLES %} topics-grid--spaced{% endif %}">
-      {% for t in content.TOPICS %}
+      {% for tm in site.temas %}
       <article class="topic-card reveal">
         <div class="topic-top">
-          {{ icon(t.icon, 'topic-icon') }}
-          {% if not content.ARTICLES %}<span class="badge">Em breve</span>{% endif %}
+          {{ icon(tm.icone, 'topic-icon') }}
+          {% if not content.ARTICLES and t.selo %}<span class="badge">{{ t.selo }}</span>{% endif %}
         </div>
-        <h3>{{ t.title }}</h3>
-        <p>{{ t.desc }}</p>
+        <h3>{{ tm.titulo }}</h3>
+        {% if tm.descricao %}<p>{{ tm.descricao }}</p>{% endif %}
       </article>
       {% endfor %}
     </div>
+    {% endif %}
   </div>
 </section>

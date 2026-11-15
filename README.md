@@ -12,6 +12,7 @@ O layout segue o design aprovado no Claude Design (`../Jaqueline Sias Despachant
 - [Colocar no ar](#colocar-no-ar)
 - [Configuração (.env)](#configuração-env)
 - [Formulário de contato](#formulário-de-contato)
+- [Painel administrativo (/admin)](#painel-administrativo-admin)
 - [Editar conteúdo](#editar-conteúdo)
 - [SEO](#seo)
 - [Segurança e LGPD](#segurança-e-lgpd)
@@ -158,9 +159,34 @@ Campos vazios não aparecem no site. Nada é inventado: se um dado não estiver 
   - **E-mail** via SMTP, quando `MAIL_SERVER` estiver preenchido. Para Hotmail/Outlook: `smtp-mail.outlook.com`, porta `587`, TLS. Se a conta tiver verificação em duas etapas, use uma senha de aplicativo.
 - Após o envio, o cliente vê um botão "Agilizar pelo WhatsApp" com mensagem já preenchida.
 
+## Painel administrativo (/admin)
+
+Acesse `https://seudominio/admin` com a senha definida em `ADMIN_PASSWORD` no `.env` (sem ela o painel fica desativado). Depois do primeiro acesso, troque a senha em **Alterar senha** — a nova senha vale no lugar da do `.env`.
+
+| Aba | O que dá para fazer |
+|---|---|
+| Início | Resumo, atalhos e diagnóstico de SEO/configuração |
+| Textos do site | Títulos, chamadas, botões, texto do Sobre, formulário, rodapé, topo das páginas |
+| Serviços | Incluir, editar, reordenar e remover serviços (ícone, descrição, mensagem de WhatsApp) |
+| Diferenciais | Incluir, editar, reordenar e remover cartões |
+| Avaliações do Google | Incluir/remover avaliações e esconder sem apagar |
+| Como funciona, FAQ e temas | Passos, perguntas e respostas (viram FAQPage no Google), temas |
+| Fotos | Foto do topo, foto do Sobre, logotipo, imagem de compartilhamento e galeria (recorte e WebP automáticos) |
+| Contato e WhatsApp | Número do WhatsApp, outro telefone, e-mail, Instagram, endereço, horário, mapa, link das avaliações |
+| SEO (Google) | Título e descrição de cada página com prévia do Google, cidades atendidas, verificação Google/Bing/Meta, noindex |
+| Pixels e rastreamento | GA4, Google Ads (com conversão), Tag Manager, Pixel da Meta, TikTok, Clarity e código personalizado |
+| Aparência e seções | Mostrar/esconder seções, cores da marca, quantidade inicial de avaliações |
+| Backup e restaurar | Baixar/importar backup, voltar a versões anteriores e **restaurar o site original** |
+
+Cada aba também tem o botão **Restaurar o padrão desta aba**. Antes de qualquer restauração ou importação é criado um backup automático.
+
+**Onde ficam os dados**: `instance/site_settings.json` (só o que foi alterado), `instance/uploads/` (fotos) e `instance/backups/`. No Docker, tudo isso fica no volume `contatos` (montado em `/app/instance`) — inclua esse volume no backup do servidor.
+
+**Pixels e LGPD**: com algum pixel ativo, o site mostra um aviso de cookies e só carrega os pixels depois que o visitante aceita (pode ser desligado, não recomendado). A Política de Privacidade e o rodapé se ajustam automaticamente. Cliques em WhatsApp viram eventos `contact`/`Contact` e envios do formulário `generate_lead`/`Lead`/`SubmitForm`. A CSP é ampliada só para os domínios das ferramentas ativas; Tag Manager ou código personalizado exigem uma CSP mais permissiva.
+
 ## Editar conteúdo
 
-Textos de serviços, diferenciais, passos, FAQ, temas e avaliações ficam em [`app/content.py`](app/content.py). Altere ali e reinicie a aplicação.
+No dia a dia, edite pelo painel `/admin` (seção acima). [`app/content.py`](app/content.py) guarda o conteúdo **original**, usado quando se clica em "Restaurar padrão".
 
 **Publicar artigos** na seção Conteúdo:
 
@@ -171,7 +197,7 @@ Textos de serviços, diferenciais, passos, FAQ, temas e avaliações ficam em [`
    ```
 3. O artigo aparece em `/conteudo`, na home e no `sitemap.xml`.
 
-**Imagens**: as fotos estão em WebP otimizado (`static/images/team` e `static/images/branding`). Para trocar uma foto, mantenha o mesmo nome e proporção, ou ajuste o template correspondente.
+**Imagens**: troque pelo painel (aba Fotos). As originais ficam em `static/images/team` e `static/images/branding`.
 
 ## SEO
 

@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-  {% with crumb='Conteúdo', heading='Conteúdo e informação',
-          lead='Orientações sobre documentação veicular, legislação, cuidados com o veículo e processos administrativos.' %}
+  {% with crumb='Conteúdo', heading=txt.paginas.conteudo_titulo, lead=txt.paginas.conteudo_texto %}
     {% include "partials/page_hero.html" %}
   {% endwith %}
   {% include "partials/conteudo.html" %}
-  {% include "partials/instagram.html" %}
+  {% if show.instagram %}{% include "partials/instagram.html" %}{% endif %}
 {% endblock %}

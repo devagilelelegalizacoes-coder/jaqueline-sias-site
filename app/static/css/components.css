@@ -299,3 +299,26 @@
   .wa-pulse { display: none; }
   .reveal--pending { opacity: 1; }
 }
+
+/* ---------- Aviso de cookies (só aparece quando há pixels configurados no painel) ---------- */
+.cookie-banner {
+  position: fixed; z-index: 70; left: 12px; right: 12px; bottom: 12px;
+  max-width: 760px; margin-inline: auto; padding: 18px 20px;
+  background: var(--purple-night); color: var(--white);
+  border: 1px solid rgba(212, 175, 106, .45); border-radius: var(--radius);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, .35);
+}
+.cookie-banner[hidden] { display: none; }
+.cookie-inner { display: flex; flex-direction: column; gap: 14px; }
+.cookie-inner p { font-size: 14px; line-height: 1.6; color: rgba(255, 255, 255, .9); }
+.cookie-inner a { color: var(--gold-light); text-decoration: underline; }
+@media (min-width: 720px) {
+  .cookie-inner { flex-direction: row; align-items: center; }
+  .cookie-inner .btn-row { flex-wrap: nowrap; }
+}
+.footer-link-btn {
+  padding: 0; border: 0; background: none; font: inherit; text-align: left; cursor: pointer;
+  color: rgba(255, 255, 255, .78); width: fit-content;
+}
+.footer-link-btn:hover { color: var(--gold-light); }
+.cookie-banner .btn-ghost-light { background: transparent; }

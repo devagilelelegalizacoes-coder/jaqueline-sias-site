@@ -1,15 +1,16 @@
+{% set t = txt.como_funciona %}
 <section id="como-funciona" class="section section-dark" aria-labelledby="como-funciona-title">
   <div class="container container--narrow">
     <div class="section-head section-head--center">
-      <p class="eyebrow">Como funciona</p>
-      <h2 id="como-funciona-title" class="section-title">Três passos para começar.</h2>
+      {% if t.chamada %}<p class="eyebrow">{{ t.chamada }}</p>{% endif %}
+      <h2 id="como-funciona-title" class="section-title">{{ t.titulo }}</h2>
     </div>
     <ol class="steps">
-      {% for st in content.STEPS %}
+      {% for st in site.passos %}
       <li class="step reveal">
         <span class="step-number" aria-hidden="true">{{ loop.index }}</span>
-        <h3><span class="visually-hidden">Passo {{ loop.index }}: </span>{{ st.title }}</h3>
-        <p>{{ st.desc }}</p>
+        <h3><span class="visually-hidden">Passo {{ loop.index }}: </span>{{ st.titulo }}</h3>
+        {% if st.descricao %}<p>{{ st.descricao }}</p>{% endif %}
       </li>
       {% endfor %}
     </ol>

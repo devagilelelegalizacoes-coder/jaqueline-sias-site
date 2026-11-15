@@ -1,19 +1,19 @@
 {% extends "base.html" %}
 {% block preload %}
-  <link rel="preload" as="image" href="{{ asset('images/team/jaqueline-hero.webp') }}"
-        imagesrcset="{{ asset('images/team/jaqueline-hero-480.webp') }} 480w, {{ asset('images/team/jaqueline-hero.webp') }} 700w"
+  <link rel="preload" as="image" href="{{ media(site.fotos.hero) }}"
+        imagesrcset="{{ media(site.fotos.hero_pequena) }} 480w, {{ media(site.fotos.hero) }} 700w"
         imagesizes="(min-width: 900px) 460px, 90vw" fetchpriority="high">
 {% endblock %}
 {% block body_class %}page-home{% endblock %}
 {% block content %}
   {% include "partials/hero.html" %}
-  {% include "partials/sobre.html" %}
-  {% include "partials/servicos.html" %}
-  {% include "partials/diferenciais.html" %}
-  {% include "partials/avaliacoes.html" %}
-  {% include "partials/como_funciona.html" %}
-  {% include "partials/faq.html" %}
-  {% include "partials/conteudo.html" %}
-  {% include "partials/instagram.html" %}
-  {% include "partials/contato.html" %}
+  {% if show.sobre %}{% include "partials/sobre.html" %}{% endif %}
+  {% if show.servicos %}{% include "partials/servicos.html" %}{% endif %}
+  {% if show.diferenciais %}{% include "partials/diferenciais.html" %}{% endif %}
+  {% if show.avaliacoes %}{% include "partials/avaliacoes.html" %}{% endif %}
+  {% if show.como_funciona %}{% include "partials/como_funciona.html" %}{% endif %}
+  {% if show.faq %}{% include "partials/faq.html" %}{% endif %}
+  {% if show.conteudo %}{% include "partials/conteudo.html" %}{% endif %}
+  {% if show.instagram %}{% include "partials/instagram.html" %}{% endif %}
+  {% if show.contato %}{% include "partials/contato.html" %}{% endif %}
 {% endblock %}

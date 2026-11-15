@@ -1,0 +1,56 @@
+{% set logged = request.endpoint != 'admin.login' %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{% block title %}Painel{% endblock %} · Painel Jaqueline Sias</title>
+  <link rel="icon" href="{{ url_for('main.favicon') }}" sizes="any">
+  <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+</head>
+<body class="adm{% if not logged %} adm--login{% endif %}">
+  {% if logged %}
+  <header class="adm-top">
+    <a class="adm-brand" href="{{ url_for('admin.dashboard') }}">
+      <img src="{{ asset('images/branding/monograma.webp') }}" alt="" width="32" height="32">
+      <span>Painel do site</span>
+    </a>
+    <button class="adm-menu-btn" type="button" aria-expanded="false" aria-controls="adm-nav" data-adm-menu>{{ icon('menu') }}<span>Menu</span></button>
+    <a class="adm-top-link" href="{{ url_for('main.index') }}" target="_blank" rel="noopener">Ver site {{ icon('arrow-right') }}</a>
+  </header>
+  <div class="adm-shell">
+    <nav class="adm-nav" id="adm-nav" aria-label="Seções do painel" data-adm-nav>
+      {% set ep = request.endpoint %}
+      {% set cur_page = request.view_args.page if request.view_args else None %}
+      <a href="{{ url_for('admin.dashboard') }}" {% if ep == 'admin.dashboard' %}aria-current="page"{% endif %}>{{ icon('compass') }} Início</a>
+      <p class="adm-nav-label">Conteúdo</p>
+      {% for key in ['textos', 'servicos', 'diferenciais', 'avaliacoes', 'conteudos'] %}
+      <a href="{{ url_for('admin.edit', page=key) }}" {% if cur_page == key %}aria-current="page"{% endif %}>{{ icon(admin_pages[key].icon) }} {{ admin_pages[key].title }}</a>
+      {% endfor %}
+      <a href="{{ url_for('admin.photos') }}" {% if ep == 'admin.photos' %}aria-current="page"{% endif %}>{{ icon('copy') }} Fotos</a>
+      <p class="adm-nav-label">Configurações</p>
+      {% for key in ['contato', 'seo', 'pixels', 'aparencia'] %}
+      <a href="{{ url_for('admin.edit', page=key) }}" {% if cur_page == key %}aria-current="page"{% endif %}>{{ icon(admin_pages[key].icon) }} {{ admin_pages[key].title }}</a>
+      {% endfor %}
+      <a href="{{ url_for('admin.backup') }}" {% if ep == 'admin.backup' %}aria-current="page"{% endif %}>{{ icon('shield-check') }} Backup e restaurar</a>
+      <a href="{{ url_for('admin.password') }}" {% if ep == 'admin.password' %}aria-current="page"{% endif %}>{{ icon('settings-2') }} Alterar senha</a>
+      <form method="post" action="{{ url_for('admin.logout') }}" class="adm-logout">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit">{{ icon('x') }} Sair</button>
+      </form>
+    </nav>
+    <main class="adm-main" id="conteudo">
+      {% include "admin/_flash.html" %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+  {% else %}
+  <main class="adm-login-main">
+    {% include "admin/_flash.html" %}
+    {% block login %}{% endblock %}
+  </main>
+  {% endif %}
+  <script src="{{ asset('js/admin.js') }}" defer></script>
+</body>
+</html>

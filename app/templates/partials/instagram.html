@@ -1,21 +1,25 @@
-{% if cfg.INSTAGRAM_URL %}
+{% set c = site.contato %}
+{% set t = txt.instagram %}
+{% if c.instagram_url %}
 <section id="instagram" class="section section-dark section-dark--alt" aria-labelledby="instagram-title">
   <div class="container">
     <div class="section-head section-head--split">
       <div>
-        <a class="eyebrow-link" href="{{ cfg.INSTAGRAM_URL }}" target="_blank" rel="noopener">{{ cfg.INSTAGRAM_HANDLE }}</a>
-        <h2 id="instagram-title" class="section-title">Acompanhe nossas dicas e novidades.</h2>
+        <a class="eyebrow-link" href="{{ c.instagram_url }}" target="_blank" rel="noopener">{{ c.instagram_usuario or 'Instagram' }}</a>
+        <h2 id="instagram-title" class="section-title">{{ t.titulo }}</h2>
       </div>
-      <a class="btn btn-outline-gold" href="{{ cfg.INSTAGRAM_URL }}" target="_blank" rel="noopener">{{ icon('instagram') }} Visitar o Instagram</a>
+      <a class="btn btn-outline-gold" href="{{ c.instagram_url }}" target="_blank" rel="noopener">{{ icon('instagram') }} {{ t.botao }}</a>
     </div>
+    {% if site.fotos.galeria %}
     <div class="insta-grid">
-      {% for img in content.INSTAGRAM_GALLERY %}
-      <a class="insta-tile reveal" href="{{ cfg.INSTAGRAM_URL }}" target="_blank" rel="noopener" aria-label="Ver o perfil {{ cfg.INSTAGRAM_HANDLE }} no Instagram">
-        <img src="{{ asset(img.src) }}" alt="{{ img.alt }}" width="{{ img.w }}" height="{{ img.h }}" loading="lazy" decoding="async"{% if img.pos %} class="obj-{{ img.pos }}"{% endif %}>
+      {% for img in site.fotos.galeria %}
+      <a class="insta-tile reveal" href="{{ c.instagram_url }}" target="_blank" rel="noopener" aria-label="Ver o perfil {{ c.instagram_usuario }} no Instagram">
+        <img src="{{ media(img.src) }}" alt="{{ img.alt or 'Foto institucional' }}" width="{{ img.w }}" height="{{ img.h }}" loading="lazy" decoding="async"{% if img.pos %} class="obj-{{ img.pos }}"{% endif %}>
       </a>
       {% endfor %}
     </div>
-    <p class="note-light">Materiais institucionais da marca. As publicações recentes estão no perfil oficial.</p>
+    {% endif %}
+    {% if t.nota %}<p class="note-light">{{ t.nota }}</p>{% endif %}
   </div>
 </section>
 {% endif %}

@@ -9,7 +9,7 @@
       <p class="muted">Última atualização: {{ updated.strftime('%d/%m/%Y') }}</p>
 
       <h2>1. Quem é responsável pelos dados</h2>
-      <p>Este site pertence a <strong>Jaqueline Sias Despachante</strong>, responsável pelo tratamento dos dados pessoais enviados por meio dele, nos termos da Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018 — LGPD).{% if cfg.CONTACT_EMAIL %} Para qualquer assunto relacionado a esta política, escreva para <a href="mailto:{{ cfg.CONTACT_EMAIL }}">{{ cfg.CONTACT_EMAIL }}</a>.{% endif %}</p>
+      <p>Este site pertence a <strong>Jaqueline Sias Despachante</strong>, responsável pelo tratamento dos dados pessoais enviados por meio dele, nos termos da Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018 — LGPD).{% if site.contato.email %} Para qualquer assunto relacionado a esta política, escreva para <a href="mailto:{{ site.contato.email }}">{{ site.contato.email }}</a>.{% endif %}</p>
 
       <h2>2. Quais dados são coletados</h2>
       <p>Coletamos somente o necessário para responder ao seu contato. No formulário do site:</p>
@@ -35,14 +35,19 @@
       <p>Ao clicar em botões de WhatsApp ou Instagram, você é direcionado a serviços da Meta Platforms, que têm políticas de privacidade próprias.</p>
 
       <h2>7. Cookies e rastreadores</h2>
+      {% if has_tracking %}
+      <p>É utilizado um cookie de sessão estritamente necessário, que protege o formulário contra envios fraudulentos e é apagado ao fechar o navegador.</p>
+      <p>Com a sua autorização{% if not site.pixels.pedir_consentimento %} (ao continuar navegando){% endif %}, este site também utiliza ferramentas de análise de audiência e de mensuração de anúncios{% set tools = [] %}{% if site.pixels.ga4 or site.pixels.google_ads or site.pixels.gtm %}{% set tools = tools + ['Google'] %}{% endif %}{% if site.pixels.meta %}{% set tools = tools + ['Meta (Facebook/Instagram)'] %}{% endif %}{% if site.pixels.tiktok %}{% set tools = tools + ['TikTok'] %}{% endif %}{% if site.pixels.clarity %}{% set tools = tools + ['Microsoft Clarity'] %}{% endif %}{% if tools %} ({{ tools|join(', ') }}){% endif %}, que podem gravar cookies e coletar dados de navegação, como páginas visitadas e cliques. Esses dados são usados para entender as visitas e melhorar a divulgação dos serviços.{% if site.pixels.pedir_consentimento %} Você pode aceitar ou recusar no aviso de cookies e mudar sua escolha a qualquer momento em "Preferências de cookies", no rodapé.{% endif %}</p>
+      {% else %}
       <p>Este site não utiliza cookies de publicidade, ferramentas de análise ou rastreadores de terceiros. É utilizado apenas um cookie de sessão estritamente necessário, que protege o formulário contra envios fraudulentos e é apagado ao fechar o navegador.</p>
+      {% endif %}
       <p>Como em qualquer site, o servidor registra informações técnicas de acesso (como endereço IP, data e hora) para fins de segurança e cumprimento do Marco Civil da Internet (Lei nº 12.965/2014).</p>
 
       <h2>8. Segurança</h2>
       <p>O site utiliza conexão criptografada (HTTPS), proteção contra envios automatizados e controles de acesso aos dados recebidos.</p>
 
       <h2>9. Seus direitos</h2>
-      <p>Você pode, a qualquer momento, solicitar a confirmação da existência de tratamento, o acesso, a correção, a anonimização ou a eliminação dos seus dados, além de revogar o consentimento, conforme o art. 18 da LGPD.{% if cfg.CONTACT_EMAIL %} Basta enviar o pedido para <a href="mailto:{{ cfg.CONTACT_EMAIL }}">{{ cfg.CONTACT_EMAIL }}</a>.{% endif %} Você também pode apresentar reclamação à Autoridade Nacional de Proteção de Dados (ANPD).</p>
+      <p>Você pode, a qualquer momento, solicitar a confirmação da existência de tratamento, o acesso, a correção, a anonimização ou a eliminação dos seus dados, além de revogar o consentimento, conforme o art. 18 da LGPD.{% if site.contato.email %} Basta enviar o pedido para <a href="mailto:{{ site.contato.email }}">{{ site.contato.email }}</a>.{% endif %} Você também pode apresentar reclamação à Autoridade Nacional de Proteção de Dados (ANPD).</p>
 
       <h2>10. Alterações</h2>
       <p>Esta política pode ser atualizada. A data da última revisão aparece no início desta página.</p>

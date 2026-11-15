@@ -5,7 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import BooleanField, SelectField, StringField, TextAreaField
 from wtforms.validators import DataRequired, Length, Optional, ValidationError
 
-from .content import SERVICE_NAMES
+from .settings_store import get_settings
 
 OTHER_SERVICE = "Outro assunto"
 
@@ -34,9 +34,7 @@ class ContactForm(FlaskForm):
     )
     servico = SelectField(
         "Serviço de interesse",
-        choices=[("", "Selecione (opcional)")]
-        + [(n, n) for n in SERVICE_NAMES]
-        + [(OTHER_SERVICE, OTHER_SERVICE)],
+        choices=[],  # preenchido em __init__ com os serviços do painel
         validators=[Optional()],
         validate_choice=True,
     )
@@ -54,6 +52,13 @@ class ContactForm(FlaskForm):
     )
     # Honeypot anti-spam: campo invisível que pessoas não preenchem.
     website = StringField("Site", filters=[_strip])
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        names = [s["nome"] for s in get_settings()["servicos"]]
+        self.servico.choices = (
+            [("", "Selecione (opcional)")] + [(n, n) for n in names] + [(OTHER_SERVICE, OTHER_SERVICE)]
+        )
 
     def validate_nome(self, field):
         if not re.fullmatch(r"[A-Za-zÀ-ÖØ-öø-ÿ' .-]+", field.data or ""):

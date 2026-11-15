@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-  {% with crumb='Serviços', heading='Serviços de despachante veicular',
-          lead='Transferência, emplacamento, licenciamento e regularização de documentos, com orientação do início ao fim do processo.' %}
+  {% with crumb='Serviços', heading=txt.paginas.servicos_titulo, lead=txt.paginas.servicos_texto %}
     {% include "partials/page_hero.html" %}
   {% endwith %}
   {% include "partials/servicos.html" %}
-  {% include "partials/como_funciona.html" %}
-  {% include "partials/faq.html" %}
+  {% if show.como_funciona %}{% include "partials/como_funciona.html" %}{% endif %}
+  {% if show.faq %}{% include "partials/faq.html" %}{% endif %}
   {% include "partials/contato.html" %}
 {% endblock %}
