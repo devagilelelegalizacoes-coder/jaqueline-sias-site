@@ -1,0 +1,77 @@
+{% extends "admin/base.html" %}
+{% block title %}Início{% endblock %}
+{% block content %}
+{% set visible_reviews = site.avaliacoes|selectattr('visivel')|list|length %}
+{% set p = site.pixels %}
+<div class="adm-head">
+  <div>
+    <h1>Olá! Este é o painel do seu site.</h1>
+    <p class="adm-intro">Tudo o que você salvar aqui aparece no site na hora. Antes de restaurar ou importar, um backup é criado automaticamente.</p>
+  </div>
+</div>
+
+<div class="adm-stats">
+  <a class="adm-stat" href="{{ url_for('admin.edit', page='servicos') }}"><strong>{{ site.servicos|length }}</strong><span>serviços</span></a>
+  <a class="adm-stat" href="{{ url_for('admin.edit', page='diferenciais') }}"><strong>{{ site.diferenciais|length }}</strong><span>diferenciais</span></a>
+  <a class="adm-stat" href="{{ url_for('admin.edit', page='avaliacoes') }}"><strong>{{ visible_reviews }}<small>/{{ site.avaliacoes|length }}</small></strong><span>avaliações visíveis</span></a>
+  <a class="adm-stat" href="{{ url_for('admin.edit', page='conteudos') }}"><strong>{{ site.faq|length }}</strong><span>perguntas no FAQ</span></a>
+</div>
+
+<div class="adm-cols">
+  <section class="adm-card">
+    <h2>Diagnóstico de SEO e configuração</h2>
+    {% if checks %}
+    <ul class="adm-checks">
+      {% for c in checks %}
+      <li class="adm-check adm-check--{{ c.level }}">
+        <span class="adm-check-tag">{{ {'erro': 'Corrigir', 'aviso': 'Atenção', 'dica': 'Dica'}[c.level] }}</span>
+        <span>{{ c.msg }}{% if c.page %} <a href="{{ url_for('admin.edit', page=c.page) }}">Abrir</a>{% endif %}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="adm-ok">Tudo certo! Nenhum problema encontrado.</p>
+    {% endif %}
+  </section>
+
+  <section class="adm-card">
+    <h2>Resumo</h2>
+    <dl class="adm-dl">
+      <dt>WhatsApp</dt><dd>{{ phone_display() or 'não configurado' }}</dd>
+      <dt>E-mail</dt><dd>{{ site.contato.email or '—' }}</dd>
+      <dt>Pixels ativos</dt>
+      <dd>
+        {% set active = [] %}
+        {% if p.ga4 %}{% set active = active + ['Google Analytics'] %}{% endif %}
+        {% if p.google_ads %}{% set active = active + ['Google Ads'] %}{% endif %}
+        {% if p.gtm %}{% set active = active + ['Tag Manager'] %}{% endif %}
+        {% if p.meta %}{% set active = active + ['Meta'] %}{% endif %}
+        {% if p.tiktok %}{% set active = active + ['TikTok'] %}{% endif %}
+        {% if p.clarity %}{% set active = active + ['Clarity'] %}{% endif %}
+        {{ active|join(', ') or 'nenhum' }}
+      </dd>
+      <dt>Aviso de cookies</dt><dd>{{ 'ativo' if tracking and p.pedir_consentimento else ('desativado' if tracking else 'não necessário (sem pixels)') }}</dd>
+      <dt>Indexação no Google</dt><dd>{{ 'BLOQUEADA (noindex)' if site.seo.bloquear_indexacao else 'liberada' }}</dd>
+      <dt>Sitemap</dt><dd><a href="{{ url_for('main.sitemap') }}" target="_blank" rel="noopener">{{ cfg.SITE_URL }}/sitemap.xml</a></dd>
+    </dl>
+    <div class="serp serp--static" aria-label="Prévia da página inicial no Google">
+      <span class="serp-label">Como a página inicial aparece no Google</span>
+      <span class="serp-url">{{ cfg.SITE_URL|replace('https://', '')|replace('http://', '') }}</span>
+      <span class="serp-title">{{ site.seo.paginas.index.titulo }}</span>
+      <span class="serp-desc">{{ site.seo.paginas.index.descricao }}</span>
+    </div>
+  </section>
+</div>
+
+<section class="adm-card">
+  <h2>Atalhos</h2>
+  <div class="adm-shortcuts">
+    <a href="{{ url_for('admin.edit', page='contato') }}">{{ icon('whatsapp') }} Trocar número do WhatsApp</a>
+    <a href="{{ url_for('admin.edit', page='avaliacoes') }}">{{ icon('message-circle') }} Adicionar avaliação do Google</a>
+    <a href="{{ url_for('admin.edit', page='servicos') }}">{{ icon('car-front') }} Editar serviços</a>
+    <a href="{{ url_for('admin.photos') }}">{{ icon('copy') }} Trocar fotos</a>
+    <a href="{{ url_for('admin.edit', page='pixels') }}">{{ icon('settings-2') }} Instalar pixel</a>
+    <a href="{{ url_for('admin.edit', page='seo') }}">{{ icon('search') }} Ajustar SEO</a>
+  </div>
+</section>
+{% endblock %}

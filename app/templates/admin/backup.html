@@ -1,0 +1,66 @@
+{% extends "admin/base.html" %}
+{% block title %}Backup e restaurar{% endblock %}
+{% block content %}
+<div class="adm-head">
+  <div>
+    <h1>Backup e restaurar</h1>
+    <p class="adm-intro">Guarde uma cópia das suas alterações, volte para uma versão anterior ou restaure o site original.</p>
+  </div>
+</div>
+
+<div class="adm-cols">
+  <section class="adm-card">
+    <h2>Baixar uma cópia</h2>
+    <p class="adm-sub">Arquivo com todos os textos e configurações alterados no painel (as fotos ficam no servidor).</p>
+    <a class="adm-btn adm-btn--primary" href="{{ url_for('admin.export_settings') }}">Baixar backup (.json)</a>
+  </section>
+  <section class="adm-card">
+    <h2>Importar uma cópia</h2>
+    <form method="post" action="{{ url_for('admin.import_settings') }}" enctype="multipart/form-data"
+          data-confirm="Substituir as configurações atuais pelo arquivo enviado? Um backup da versão atual será salvo.">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="af">
+        <label for="arquivo">Arquivo .json exportado por este painel</label>
+        <input type="file" id="arquivo" name="arquivo" accept="application/json,.json" required>
+      </div>
+      <button class="adm-btn adm-btn--ghost" type="submit">Importar</button>
+    </form>
+  </section>
+</div>
+
+<section class="adm-card">
+  <h2>Versões anteriores</h2>
+  {% if backups %}
+  <p class="adm-sub">Criadas automaticamente antes de cada restauração ou importação (as {{ backups|length }} mais recentes).</p>
+  <ul class="adm-backups">
+    {% for b in backups %}
+    {% set parts = b.split('-') %}
+    <li>
+      <span>{{ parts[1][6:8] }}/{{ parts[1][4:6] }}/{{ parts[1][:4] }} às {{ parts[2][:2] }}:{{ parts[2][2:4] }} — {{ parts[4:]|join(' ')|replace('.json', '') }}</span>
+      <form method="post" action="{{ url_for('admin.restore_backup') }}" data-confirm="Voltar o site para esta versão?">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="nome" value="{{ b }}">
+        <button class="adm-btn adm-btn--ghost adm-btn--sm" type="submit">Restaurar esta versão</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="adm-sub">Nenhum backup ainda.</p>
+  {% endif %}
+</section>
+
+<section class="adm-card adm-card--danger">
+  <h2>Restaurar o site original</h2>
+  <p class="adm-sub">Apaga <strong>todas</strong> as alterações feitas no painel (textos, listas, fotos, SEO, pixels e cores) e volta ao conteúdo original. Uma cópia da versão atual é salva em "Versões anteriores", então dá para desfazer.</p>
+  <form method="post" action="{{ url_for('admin.reset_all') }}" class="adm-inline-form"
+        data-confirm="Tem certeza? O site inteiro voltará ao conteúdo original.">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="af">
+      <label for="confirmacao">Digite RESTAURAR para confirmar</label>
+      <input type="text" id="confirmacao" name="confirmacao" autocomplete="off" required pattern="[Rr][Ee][Ss][Tt][Aa][Uu][Rr][Aa][Rr]">
+    </div>
+    <button class="adm-btn adm-btn--danger" type="submit">Restaurar tudo</button>
+  </form>
+</section>
+{% endblock %}

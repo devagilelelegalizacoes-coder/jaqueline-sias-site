@@ -1,12 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-  {% with crumb='Sobre', heading='Sobre a Jaqueline Sias',
-          lead='Atendimento próximo, comunicação transparente e documentação conduzida com responsabilidade.' %}
+  {% with crumb='Sobre', heading=txt.paginas.sobre_titulo, lead=txt.paginas.sobre_texto %}
     {% include "partials/page_hero.html" %}
   {% endwith %}
   {% include "partials/sobre.html" %}
-  {% include "partials/diferenciais.html" %}
-  {% include "partials/avaliacoes.html" %}
-  {% include "partials/instagram.html" %}
+  {% if show.diferenciais %}{% include "partials/diferenciais.html" %}{% endif %}
+  {% if show.avaliacoes %}{% include "partials/avaliacoes.html" %}{% endif %}
+  {% if show.instagram %}{% include "partials/instagram.html" %}{% endif %}
   {% include "partials/contato.html" %}
 {% endblock %}

@@ -64,6 +64,15 @@ class Config:
     MAIL_SENDER = os.getenv("MAIL_SENDER", "").strip()
     MAIL_RECIPIENT = os.getenv("MAIL_RECIPIENT", "").strip()
 
+    # Painel administrativo (/admin) e conteúdo editável
+    ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "")
+    ADMIN_PASSWORD_HASH = os.getenv("ADMIN_PASSWORD_HASH", "").strip()
+    ADMIN_AUTH_PATH = os.getenv("ADMIN_AUTH_PATH", str(BASE_DIR / "instance" / "admin_auth.json"))
+    SETTINGS_PATH = os.getenv("SETTINGS_PATH", str(BASE_DIR / "instance" / "site_settings.json"))
+    UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", str(BASE_DIR / "instance" / "uploads"))
+    ADMIN_MAX_CONTENT_LENGTH = 40 * 1024 * 1024  # envio de fotos pelo painel
+    PERMANENT_SESSION_LIFETIME = 60 * 60 * 8  # sessão do painel: 8 horas
+
     # Limite de requisições (Flask-Limiter). Use redis://... com múltiplos workers/instâncias.
     RATELIMIT_STORAGE_URI = os.getenv("RATELIMIT_STORAGE_URI", "memory://")
     RATELIMIT_DEFAULT = os.getenv("RATELIMIT_DEFAULT", "300 per hour")
@@ -102,6 +111,10 @@ class TestingConfig(Config):
     CONTACT_EMAIL = "contato@exemplo.com.br"
     BUSINESS_CITY = "Niterói"
     BUSINESS_STATE = "RJ"
+    # configurações em memória (os testes passam caminhos temporários quando precisam de disco)
+    SETTINGS_PATH = ""
+    ADMIN_AUTH_PATH = ""
+    ADMIN_PASSWORD = "senha-de-teste-123"
 
 
 CONFIGS = {

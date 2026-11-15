@@ -1,0 +1,22 @@
+{% extends "admin/base.html" %}
+{% block title %}Entrar{% endblock %}
+{% block login %}
+<div class="adm-login-card">
+  <img src="{{ asset('images/branding/logo-horizontal.webp') }}" alt="Jaqueline Sias Despachante" width="148" height="44">
+  <h1>Painel do site</h1>
+  {% if enabled %}
+  <form method="post" action="{{ url_for('admin.login') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="next" value="{{ next }}">
+    <div class="af">
+      <label for="senha">Senha</label>
+      <input id="senha" name="senha" type="password" autocomplete="current-password" required autofocus>
+    </div>
+    <button class="adm-btn adm-btn--primary adm-btn--block" type="submit">Entrar</button>
+  </form>
+  {% else %}
+  <p class="adm-note">O painel está desativado. Defina <code>ADMIN_PASSWORD</code> no arquivo <code>.env</code> do servidor e reinicie o site.</p>
+  {% endif %}
+  <a class="adm-muted-link" href="{{ url_for('main.index') }}">← Voltar ao site</a>
+</div>
+{% endblock %}

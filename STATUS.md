@@ -1,6 +1,6 @@
 # Status do projeto — onde paramos
 
-**Última atualização:** 03/11/2026
+**Última atualização:** 15/11/2026
 
 ## Concluído
 
@@ -16,11 +16,12 @@
 - [x] Testado em 360, 390, 430, 768, 1366 e 1920 px, sem erros de console.
 - [x] Lighthouse: Acessibilidade, Boas práticas e SEO 100; Performance 100 desktop / 91–99 mobile (local, sem compressão).
 - [x] Código publicado no GitHub (repositório privado).
+- [x] Painel administrativo `/admin` (15/11/2026): textos, serviços, diferenciais, avaliações, FAQ, fotos, contato/WhatsApp, SEO, pixels com aviso de cookies, cores/seções, backup e restaurar padrão. 73 testes passando.
 
 ## Próximos passos
 
 1. **Hospedagem e domínio** — definir onde o site vai rodar (VPS com Docker é a opção recomendada; ver README, "Colocar no ar").
-2. Criar o `.env` de produção: `SECRET_KEY` nova, `SITE_URL`, `DOMAIN`, `SESSION_COOKIE_SECURE=true`, `TRUST_PROXY=true`.
+2. Criar o `.env` de produção: `SECRET_KEY` nova, `ADMIN_PASSWORD`, `SITE_URL`, `DOMAIN`, `SESSION_COOKIE_SECURE=true`, `TRUST_PROXY=true`.
 3. Publicar e cadastrar no Google Search Console (enviar `sitemap.xml`).
 
 ## Pendências de confirmação com a Jaqueline

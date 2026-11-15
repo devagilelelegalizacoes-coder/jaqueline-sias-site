@@ -1,0 +1,61 @@
+{% extends "admin/base.html" %}
+{% from "admin/_macros.html" import render_field, list_row, icon_sprite with context %}
+{% block title %}{{ page.title }}{% endblock %}
+{% block content %}
+<div class="adm-head">
+  <div>
+    <h1>{{ page.title }}</h1>
+    <p class="adm-intro">{{ page.intro }}</p>
+  </div>
+</div>
+
+<form method="post" action="{{ url_for('admin.edit', page=page_key) }}" class="adm-form" data-edit-form novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  {% for block in page.blocks %}
+  <section class="adm-card" aria-labelledby="b-{{ loop.index }}">
+    <h2 id="b-{{ loop.index }}">{{ block.title }}</h2>
+    {% if block.kind == 'fields' %}
+      {% set ns = namespace(v=data) %}
+      {% for k in block.path %}{% set ns.v = ns.v[k] %}{% endfor %}
+      <div class="af-grid" data-block>
+        {% for f in block.fields %}
+        {{ render_field(f, 'f:' ~ block.id ~ ':' ~ f.key, ns.v.get(f.key)) }}
+        {% endfor %}
+      </div>
+      {% set snip = block.fields|selectattr('snippet')|first %}
+      {% if snip %}
+      <div class="serp" data-serp aria-label="Prévia no Google">
+        <span class="serp-label">Prévia no Google</span>
+        <span class="serp-url">{{ cfg.SITE_URL|replace('https://', '')|replace('http://', '') }}{{ snip.snippet if snip.snippet != '/' }}</span>
+        <span class="serp-title" data-serp-title>{{ ns.v.titulo }}</span>
+        <span class="serp-desc" data-serp-desc>{{ ns.v.descricao }}</span>
+      </div>
+      {% endif %}
+    {% else %}
+      {% set items = data[block.path[0]] %}
+      <p class="adm-sub">{{ items|length }} {{ 'item' if items|length == 1 else 'itens' }}. Clique em um item para editar. Use ↑ ↓ para mudar a ordem.</p>
+      <div class="lrows" data-list="{{ block.id }}" data-max="{{ block.max_items }}">
+        {% for item in items %}
+        {{ list_row(block, loop.index0, item) }}
+        {% endfor %}
+      </div>
+      <template data-list-template="{{ block.id }}">{{ list_row(block, '__i__', {}, open=true) }}</template>
+      <button type="button" class="adm-btn adm-btn--ghost" data-list-add="{{ block.id }}">+ Adicionar {{ block.item_label|lower }}</button>
+    {% endif %}
+  </section>
+  {% endfor %}
+
+  <div class="adm-savebar">
+    <span class="adm-dirty" data-dirty-msg hidden>Alterações não salvas</span>
+    <a class="adm-btn adm-btn--ghost" href="{{ url_for('main.index') }}" target="_blank" rel="noopener">Ver site</a>
+    <button class="adm-btn adm-btn--primary" type="submit">Salvar alterações</button>
+  </div>
+</form>
+
+<form method="post" action="{{ url_for('admin.reset_page', page=page_key) }}" class="adm-reset"
+      data-confirm="Voltar &quot;{{ page.title }}&quot; ao conteúdo original? Um backup da versão atual será salvo.">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <button type="submit" class="adm-btn adm-btn--danger-ghost">↺ Restaurar o padrão desta aba</button>
+</form>
+{{ icon_sprite() }}
+{% endblock %}

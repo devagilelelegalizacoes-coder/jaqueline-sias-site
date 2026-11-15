@@ -1,22 +1,23 @@
 {% set h = heading_tag | default('h2') %}
+{% set t = txt.servicos %}
 <section id="servicos" class="section section-dark section-dark--alt" aria-labelledby="servicos-title">
   <div class="deco-ring deco-ring--services" aria-hidden="true"></div>
   <div class="container">
     <div class="section-head section-head--split">
       <div>
-        <p class="eyebrow">Serviços</p>
-        <{{ h }} id="servicos-title" class="section-title">Documentação veicular com quem cuida de perto.</{{ h }}>
+        {% if t.chamada %}<p class="eyebrow">{{ t.chamada }}</p>{% endif %}
+        <{{ h }} id="servicos-title" class="section-title">{{ t.titulo }}</{{ h }}>
       </div>
-      <p class="section-intro">Escolha o serviço e envie uma mensagem. Você recebe a orientação sobre documentos e próximos passos para o seu caso.</p>
+      {% if t.intro %}<p class="section-intro">{{ t.intro }}</p>{% endif %}
     </div>
     <div class="services-grid">
       {% for s in services %}
       <article class="service-card reveal" id="servico-{{ s.slug }}">
-        <span class="icon-box">{{ icon(s.icon) }}</span>
-        <h3>{{ s.name }}</h3>
-        <p>{{ s.desc }}</p>
-        <a class="card-link" href="{{ s.wa or url_for('main.contato') ~ '?servico=' ~ s.name|urlencode }}" {% if s.wa %}target="_blank" rel="noopener"{% endif %} aria-label="Solicitar atendimento: {{ s.name }}">
-          Solicitar atendimento {{ icon('arrow-right') }}
+        <span class="icon-box">{{ icon(s.icone) }}</span>
+        <h3>{{ s.nome }}</h3>
+        {% if s.descricao %}<p>{{ s.descricao }}</p>{% endif %}
+        <a class="card-link" href="{{ s.wa or url_for('main.contato') ~ '?servico=' ~ s.nome|urlencode }}" {% if s.wa %}target="_blank" rel="noopener"{% endif %} aria-label="{{ t.botao_card }}: {{ s.nome }}">
+          {{ t.botao_card }} {{ icon('arrow-right') }}
         </a>
       </article>
       {% endfor %}

@@ -1,0 +1,64 @@
+{% macro render_field(f, name, value) -%}
+{% set fid = 'f-' ~ name|replace(':', '-')|replace('.', '-') %}
+{% set val = value if value is not none else f.default %}
+{% if f.type == 'icon' and val not in icons %}{% set val = icons|list|first %}{% endif %}
+<div class="af af--{{ f.type }}{% if f.type in ('textarea', 'code') %} af--wide{% endif %}">
+  {% if f.type == 'bool' %}
+  <label class="af-check"><input type="checkbox" id="{{ fid }}" name="{{ name }}" value="1" {% if val %}checked{% endif %}> <span>{{ f.label }}</span></label>
+  {% else %}
+  <label for="{{ fid }}">{{ f.label }}{% if f.required %} <span class="af-req" aria-hidden="true">*</span>{% endif %}</label>
+  {% if f.type in ('textarea', 'code') %}
+  <textarea id="{{ fid }}" name="{{ name }}" rows="{{ f.rows or 3 }}"{% if f.maxlength %} maxlength="{{ f.maxlength }}"{% endif %}{% if f.count %} data-count-min="{{ f.count[0] }}" data-count-max="{{ f.count[1] }}"{% endif %}{% if f.type == 'code' %} spellcheck="false" class="af-code"{% endif %} data-preview-key="{{ f.key }}">{{ val if val is not none }}</textarea>
+  {% elif f.type in ('select', 'icon') %}
+  {% set opts = icons if f.type == 'icon' else f.options %}
+  <div class="af-select-row">
+    {% if f.type == 'icon' %}<span class="af-icon-preview" data-icon-preview>{{ icon(val) if val in icons }}</span>{% endif %}
+    <select id="{{ fid }}" name="{{ name }}"{% if f.type == 'icon' %} data-icon-select{% endif %}>
+      {% for k, label in opts.items() %}<option value="{{ k }}" {% if k == val %}selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>
+  </div>
+  {% elif f.type == 'color' %}
+  <div class="af-color-row"><input type="color" id="{{ fid }}" name="{{ name }}" value="{{ val }}"><code data-color-code>{{ val }}</code></div>
+  {% elif f.type == 'int' %}
+  <input type="number" id="{{ fid }}" name="{{ name }}" value="{{ val }}" min="{{ f.min }}" max="{{ f.max }}" inputmode="numeric">
+  {% else %}
+  {% set shown = format_phone(val) if f.type == 'whatsapp' else val %}
+  <input type="{{ 'email' if f.type == 'email' else ('url' if f.type in ('url', 'maps') else ('tel' if f.type in ('whatsapp', 'phone') else 'text')) }}"
+         id="{{ fid }}" name="{{ name }}" value="{{ shown if shown is not none }}"
+         {% if f.maxlength %}maxlength="{{ f.maxlength }}"{% endif %}
+         {% if f.placeholder %}placeholder="{{ f.placeholder }}"{% endif %}
+         {% if f.count %}data-count-min="{{ f.count[0] }}" data-count-max="{{ f.count[1] }}"{% endif %}
+         {% if f.type == 'pixel' %}spellcheck="false" autocomplete="off"{% endif %}
+         data-preview-key="{{ f.key }}">
+  {% endif %}
+  {% if f.count %}<small class="af-counter" data-counter-for="{{ fid }}" aria-live="polite"></small>{% endif %}
+  {% endif %}
+  {% if f.help %}<small class="af-help">{{ f.help }}</small>{% endif %}
+</div>
+{%- endmacro %}
+
+{% macro list_row(block, idx, item, open=false) -%}
+<details class="lrow" data-row {% if open %}open{% endif %}>
+  <summary>
+    <span class="lrow-num" data-row-num></span>
+    <span class="lrow-title" data-row-title>{{ item.get(block.fields[0].key) or ('Novo item') }}</span>
+    {% if 'visivel' in item and not item.visivel %}<span class="lrow-tag">oculta</span>{% endif %}
+    <span class="lrow-actions">
+      <button type="button" class="adm-icon-btn" data-move="up" aria-label="Mover para cima" title="Mover para cima">↑</button>
+      <button type="button" class="adm-icon-btn" data-move="down" aria-label="Mover para baixo" title="Mover para baixo">↓</button>
+      <button type="button" class="adm-icon-btn adm-icon-btn--danger" data-remove aria-label="Remover" title="Remover">{{ icon('x') }}</button>
+    </span>
+  </summary>
+  <div class="lrow-body af-grid">
+    {% for f in block.fields %}
+    {{ render_field(f, 'l:' ~ block.id ~ ':' ~ idx ~ ':' ~ f.key, item.get(f.key)) }}
+    {% endfor %}
+  </div>
+</details>
+{%- endmacro %}
+
+{% macro icon_sprite() -%}
+<div hidden data-icon-sprite>
+  {% for k in icons %}<span data-icon="{{ k }}">{{ icon(k) }}</span>{% endfor %}
+</div>
+{%- endmacro %}

@@ -1,24 +1,25 @@
+{% set t = txt.diferenciais %}
 <section id="diferenciais" class="section section-light" aria-labelledby="diferenciais-title">
   <div class="container">
     <div class="section-head">
-      <p class="eyebrow eyebrow--dark">Diferenciais</p>
-      <h2 id="diferenciais-title" class="section-title">Por que escolher a Jaqueline?</h2>
+      {% if t.chamada %}<p class="eyebrow eyebrow--dark">{{ t.chamada }}</p>{% endif %}
+      <h2 id="diferenciais-title" class="section-title">{{ t.titulo }}</h2>
     </div>
     <div class="bento">
-      {% for d in content.DIFFERENTIALS %}
-      <article class="bento-card bento-card--{{ d.variant }} reveal">
-        {% if d.variant == 'feature' %}<span class="deco-mono deco-mono--card" aria-hidden="true"></span>{% endif %}
-        {% if d.variant == 'wide' %}
-          <span class="icon-tile">{{ icon(d.icon) }}</span>
+      {% for d in site.diferenciais %}
+      <article class="bento-card bento-card--{{ d.estilo }} reveal">
+        {% if d.estilo == 'feature' %}<span class="deco-mono deco-mono--card" aria-hidden="true"></span>{% endif %}
+        {% if d.estilo == 'wide' %}
+          <span class="icon-tile">{{ icon(d.icone) }}</span>
           <div>
-            <h3>{{ d.title }}</h3>
-            <p>{{ d.desc }}</p>
+            <h3>{{ d.titulo }}</h3>
+            {% if d.descricao %}<p>{{ d.descricao }}</p>{% endif %}
           </div>
         {% else %}
-          {{ icon(d.icon, 'bento-icon') }}
+          {{ icon(d.icone, 'bento-icon') }}
           <div class="bento-text">
-            <h3>{{ d.title }}</h3>
-            <p>{{ d.desc }}</p>
+            <h3>{{ d.titulo }}</h3>
+            {% if d.descricao %}<p>{{ d.descricao }}</p>{% endif %}
           </div>
         {% endif %}
       </article>

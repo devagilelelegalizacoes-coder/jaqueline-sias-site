@@ -123,7 +123,7 @@
   const setLoading = (on) => {
     submitBtn.disabled = on;
     submitBtn.setAttribute("aria-busy", String(on));
-    submitLabel.textContent = on ? "Enviando…" : "Enviar mensagem";
+    submitLabel.textContent = on ? "Enviando…" : (submitLabel.dataset.label || "Enviar mensagem");
   };
 
   form.addEventListener("submit", async (e) => {
@@ -152,6 +152,7 @@
         success.hidden = false;
         success.focus();
         form.reset();
+        document.dispatchEvent(new CustomEvent("contact:sent"));
         return;
       }
       if (data.errors) {

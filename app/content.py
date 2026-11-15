@@ -1,8 +1,9 @@
-"""Conteúdo institucional do site.
+"""Conteúdo ORIGINAL do site (padrão de fábrica).
 
-Fonte única para serviços, diferenciais, FAQ, avaliações e temas de conteúdo.
-Edite aqui para atualizar o site. Publique somente informações confirmadas
-pela Jaqueline: não inclua prazos, valores ou garantias sem validação.
+Serviços, diferenciais, FAQ, avaliações e temas abaixo são os valores iniciais.
+No dia a dia, edite pelo painel em /admin — as alterações ficam em
+instance/site_settings.json e o botão "Restaurar padrão" volta para o que está aqui.
+Publique somente informações confirmadas pela Jaqueline.
 """
 
 SERVICES = [
@@ -188,4 +189,3 @@ INSTAGRAM_GALLERY = [
     {"src": "images/branding/logo-fundo-roxo.webp", "alt": "Logotipo Jaqueline Sias Despachante", "w": 800, "h": 453},
 ]
 
-SERVICE_NAMES = [s["name"] for s in SERVICES]
